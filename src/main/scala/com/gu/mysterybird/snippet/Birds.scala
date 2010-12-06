@@ -9,14 +9,13 @@ import Helpers._
 import appenginehelpers.HybridCache
 import com.google.appengine.api.memcache.Expiration
 
-//SearchResponse cannot be cached...
+//SearchResponse cannot be cached as it is not serializable
+//so just pop response in this case class
 case class SearchResult(totalPages: Int, content: List[Content])
 
 class Birds extends HybridCache {
 
-  Birds.apiKey
-
-   //http://farm6.static.flickr.com/5243/5229400272_3140317214.jpg
+  //http://farm6.static.flickr.com/5243/5229400272_3140317214.jpg
   val ImageRegex = """.*<img src="(http://[\w\d/\.-_]*)"\s*width=.*""".r
 
   object currentPage extends RequestVar[Int]({
@@ -40,14 +39,11 @@ class Birds extends HybridCache {
   })
 
   object repository extends RequestVar[List[Content]] ({
-      searchResult.content
-      .filter(c => c.fields.get.get("body").isDefined)
-      .filter(c => c.fields.get.get("body").get match {
+      searchResult.content.filter(c => c.fields.get.get("body").getOrElse("") match {
         case ImageRegex(a) => true
         case _ => false
     })
   })
-
 
   def navigation = ((currentPage.get match {
     case p if p < searchResult.totalPages => ".next [href]" #> ("?page=" + (p + 1).toString)
