@@ -34,7 +34,6 @@ class Birds {
         case ImageRegex(a) => true
         case _ => false
     })
-
   })
 
 
@@ -47,7 +46,7 @@ class Birds {
     case _ => ".previous [class]" #> "disabled"
   }))
 
-  def content = "#article" #> repository.get.map(c =>
+  def content = "*" #> repository.get.map(c =>
     ".link [href]" #> c.webUrl
     & ".date *" #> c.webPublicationDate.toString("dd MMM yyyy")
     & ".bird [style]" #> (c.fields.get.get("body").get match {
@@ -59,12 +58,9 @@ class Birds {
 }
 
 object Birds {
-
   lazy val apiKey = {
     val props = new Properties()
     props.load(getClass.getResourceAsStream("settings.properties"))
     Some(props.getProperty("apiKey"))
-
   }
-
 }

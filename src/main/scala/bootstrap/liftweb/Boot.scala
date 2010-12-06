@@ -13,7 +13,7 @@ class Boot {
 
     LiftRules.defaultHeaders = {
      case _ =>
-        List("Date" -> Helpers.nowAsInternetDate, "Cache-Control" -> "public, max-age=3600")
+        List("Date" -> Helpers.nowAsInternetDate, "Cache-Control" -> "public, max-age=300")
     }
 
     LiftRules.autoIncludeAjax = _ => false
