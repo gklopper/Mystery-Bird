@@ -2,15 +2,17 @@ package com.gu.mysterybird.snippet
 
 import com.gu.openplatform.contentapi.Api
 import net.liftweb.util._
-import Helpers._
-import xml.Unparsed
 import net.liftweb.http.{S, RequestVar}
 import com.gu.openplatform.contentapi.model.{SearchResponse, Content}
 import java.util.Properties
-import java.lang.String
+import Helpers._
+import appenginehelpers.HybridCache
+import com.google.appengine.api.memcache.Expiration
 
+//SearchResponse cannot be cached...
+case class SearchResult(totalPages: Int, content: List[Content])
 
-class Birds {
+class Birds extends HybridCache {
 
   Birds.apiKey
 
@@ -21,14 +23,24 @@ class Birds {
     Integer.parseInt(S.param("page").getOrElse("1"))
   })
 
-  object searchResult extends RequestVar[SearchResponse]({
-    Api.apiKey = Birds.apiKey
-    Api.search.page(currentPage.get).pageSize(12)
-      .tag("profile/grrlscientist").q("\"today's mystery bird\"").showFields("body,trailText")
+  object searchResult extends RequestVar[SearchResult]({
+
+    Option(cache.get(currentPage.get)) match {
+      case Some(result) => result.asInstanceOf[SearchResult]
+      case None => {
+        Api.apiKey = Birds.apiKey
+        val result = Api.search.page(currentPage.get).pageSize(12)
+          .tag("profile/grrlscientist").q("\"today's mystery bird\"").showFields("body,trailText")
+
+        val cacheableResult = SearchResult(result.pages, result.results)
+        cache.put(currentPage.get, cacheableResult, Expiration.byDeltaSeconds(300))
+        cacheableResult
+      }
+    }
   })
 
   object repository extends RequestVar[List[Content]] ({
-      searchResult.results
+      searchResult.content
       .filter(c => c.fields.get.get("body").isDefined)
       .filter(c => c.fields.get.get("body").get match {
         case ImageRegex(a) => true
@@ -38,7 +50,7 @@ class Birds {
 
 
   def navigation = ((currentPage.get match {
-    case p if p < searchResult.get.pages => ".next [href]" #> ("?page=" + (p + 1).toString)
+    case p if p < searchResult.totalPages => ".next [href]" #> ("?page=" + (p + 1).toString)
     case _ => ".next [class]" #> "disabled"
   })
   & (currentPage.get match {
