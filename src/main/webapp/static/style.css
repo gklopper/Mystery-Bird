@@ -1,0 +1,68 @@
+.mystery-bird a {
+    text-decoration: none;
+    font-size: 30px;
+    color: #005689;
+}
+
+.mystery-bird .header {
+    display: block;
+    height: 140px;
+}
+
+.mystery-bird .disabled {
+    color: gray;
+}
+
+.mystery-bird .navigation {
+    display: block;
+    text-align: center;
+}
+
+.mystery-bird .nav {
+    text-align: center;
+}
+
+.mystery-bird h2 {
+    font-size: 40px;
+    color: #AB1700;
+}
+
+.mystery-bird {
+    width: 100%;
+    font-family: georgia, serif;
+}
+
+.mystery-bird img {
+    display: inline;
+    float: left;
+}
+
+.mystery-bird .bird {
+    width: 300px;
+    height: 300px;
+    background-position: center 30%;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.mystery-bird .bird p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    filter: alpha(opacity = 0.8);
+    -moz-opacity: 0.8;
+    opacity: 0.8;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 20px;
+}
+
+.mystery-bird .nav {
+    clear: left;
+}
