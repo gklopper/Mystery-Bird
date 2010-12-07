@@ -1,10 +1,21 @@
 .mystery-bird {
     margin-bottom:10px;
 }
+.mystery-bird .date-wrapper {
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    overflow:hidden;
+    z-index:100;
+}
 .mystery-bird a {
     text-decoration: none;
     font-size: 30px;
     color: #005689;
+}
+
+.mystery-bird a:active {
+    background:none;
 }
 
 .mystery-bird .header {
@@ -17,8 +28,9 @@
 }
 
 .mystery-bird .navigation {
-    display: block;
+    display: inline-block;
     text-align: center;
+    width:300px;
 }
 
 .mystery-bird .nav {
@@ -53,12 +65,12 @@
     padding-bottom: 5px;
 }
 
-.mystery-bird .bird p {
-    position: absolute;
+.mystery-bird .date {
+    position: relative;
     bottom: 0;
     left: 0;
     background-color: white;
-    filter: alpha(opacity = 0.8);
+    filter: alpha(opacity = 80);
     -moz-opacity: 0.8;
     opacity: 0.8;
     padding-left: 5px;

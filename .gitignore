@@ -5,4 +5,4 @@ lib_managed
 project/boot
 project/*.iml
 project/build/target
-src/main/resources/com/gu/mysterybird/snippet/settings.properties
+src/main/resources/com/gu/mysterybird/settings.properties
