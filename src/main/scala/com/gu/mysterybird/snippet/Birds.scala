@@ -25,6 +25,6 @@ class Birds extends HybridCache {
       case Repository.ImageRegex(imgUrl) => "background-image:url(" + imgUrl + ")"
       case _ => ""
     })
-    & ".link [title]" #> c.fields.get.get("trailText").get
+    & ".link [title]" #> c.fields.get.get("trailText").getOrElse("").replace("<p>", "").replace("</p>","")
   )
 }

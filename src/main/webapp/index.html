@@ -12,6 +12,12 @@
 
     <!-- {microapp-javascript:/static/jquery.tooltip.min.js} -->
     <script type="text/javascript" src="/static/jquery.tooltip.min.js"></script>
+
+    <!-- will not be on microapp -->
+    <script type="text/javascript">
+        var jQ = jQuery.noConflict();
+    </script>
+
 </head>
 <body>
     <div class="lift:Birds.navigation mystery-bird">
@@ -33,7 +39,12 @@
             </div>
 
         <script type="text/javascript">
-            jQuery(document).ready(function(){jQuery('.link').tooltip({extraClass: "fixed"});})
+            jQ(document).ready(function(){
+                jQ('.link').tooltip({
+                    extraClass: 'fixed',
+                    showURL: false
+                });
+            })
         </script>
 
     </div>
