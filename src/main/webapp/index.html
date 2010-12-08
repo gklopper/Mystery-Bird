@@ -2,8 +2,16 @@
 <head>
     <title>Mystery bird | Science | guardian.co.uk</title>
 
-    <link rel="stylesheet" type="text/css" href="/static/style-13.css"/>
-    <!-- {microapp-css:/static/style-13.css} -->
+    <link rel="stylesheet" type="text/css" href="/static/jquery.tooltip.css"/>
+    <!-- {microapp-css:/static/jquery.tooltip.css} -->
+    <link rel="stylesheet" type="text/css" href="/static/style-14.css"/>
+    <!-- {microapp-css:/static/style-14.css} -->
+
+    <!-- this will be available on microapp page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+
+    <!-- {microapp-javascript:/static/jquery.tooltip.min.js} -->
+    <script type="text/javascript" src="/static/jquery.tooltip.min.js"></script>
 </head>
 <body>
     <div class="lift:Birds.navigation mystery-bird">
@@ -24,7 +32,10 @@
                 </a>
             </div>
 
-        <br/>
+        <script type="text/javascript">
+            jQuery(document).ready(function(){jQuery('.link').tooltip({extraClass: "fixed"});})
+        </script>
+
     </div>
 </body>
 </html>

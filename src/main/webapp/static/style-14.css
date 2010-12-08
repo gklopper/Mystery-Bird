@@ -1,6 +1,12 @@
 .mystery-bird {
     margin-bottom:10px;
 }
+#tooltip.fixed {
+    width:300px;
+}
+#tooltip h3 {
+    font-size:16px;
+}
 .mystery-bird .date-wrapper {
     position:absolute;
     bottom:0px;
