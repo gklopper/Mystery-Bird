@@ -3,7 +3,7 @@ import sbt._
 class Project(info: ProjectInfo) extends DefaultWebProject(info) {
 
   val liftSnapshots = "Scala tools" at "http://scala-tools.org/repo-snapshots"
-  val liftVersion = "2.2-SNAPSHOT"
+  val liftVersion = "2.2"
 
   val githubMvn = "Github repository" at "http://mvn.github.com/repository"
 

@@ -28,10 +28,5 @@ class Boot {
     //all paths are stateless (removes lift_page JS on bottom of page
     LiftRules.statelessTest.prepend({case _ => true})
 
-
-//    LiftRules.statelessRewrite.prepend(NamedPF("SectionMostViewedRewrite") {
-//      case RewriteRequest(ParsePath("mostviewed" :: section :: Nil, _, _,_), _, _) =>
-//        RewriteResponse("mostviewed" :: Nil, Map("section" -> section))
-//    })
   }
 }
