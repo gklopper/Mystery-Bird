@@ -2,11 +2,10 @@ package com.gu.mysterybird.snippet
 
 import net.liftweb.util._
 import Helpers._
-import appenginehelpers.HybridCache
 import com.gu.mysterybird.Repository
 
 
-class Birds extends HybridCache {
+class Birds {
 
   def navigation = ((Repository.currentPage.get match {
       case p if p < Repository.searchResult.totalPages => ".next [href]" #> ("?page=" + (p + 1).toString)

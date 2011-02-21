@@ -4,13 +4,13 @@ import com.gu.openplatform.contentapi.model.Content
 import com.gu.openplatform.contentapi.Api
 import net.liftweb.http.{S, RequestVar}
 import java.util.Properties
-import appenginehelpers.HybridCache
+import appenginehelpers.UrlFetcher
 
 //SearchResponse cannot be cached as it is not serializable
 //so just pop response in this case class
 case class SearchResult(totalPages: Int, content: List[Content])
 
-object Repository extends HybridCache {
+object Repository {
   //designed to match a url that looks like...
   //http://farm6.static.flickr.com/5243/5229400272_3140317214.jpg
   val ImageRegex = """.*<img src="(http://[\w\d/\.-_]*)"\s*width=.*""".r
@@ -35,18 +35,11 @@ object Repository extends HybridCache {
 
   object searchResult extends RequestVar[SearchResult]({
 
-    Option(cache.get(currentPage.get)) match {
-      case Some(result) => result.asInstanceOf[SearchResult]
-      case None => {
         Api.apiKey = apiKey
         val result = Api.search.page(currentPage.get).pageSize(12)
           .tag("profile/grrlscientist").q("\"today's mystery bird\"").showFields("body,trailText")
 
-        val cacheableResult = SearchResult(result.pages, result.results)
-        cache.put(currentPage.get, cacheableResult, 300 seconds)
-        cacheableResult
-      }
-    }
+        SearchResult(result.pages, result.results)
   })
 
   object fetch extends RequestVar[List[Content]] ({
