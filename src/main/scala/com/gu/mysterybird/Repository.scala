@@ -1,10 +1,11 @@
 package com.gu.mysterybird
 
 import com.gu.openplatform.contentapi.model.Content
-import com.gu.openplatform.contentapi.Api
 import net.liftweb.http.{S, RequestVar}
 import java.util.Properties
-import appenginehelpers.UrlFetcher
+import com.gu.openplatform.contentapi.Api
+import com.gu.openplatform.contentapi.connection.{HttpResponse, Http}
+import appenginehelpers.{UrlFetcher, Response, ExpirationSeconds}
 
 //SearchResponse cannot be cached as it is not serializable
 //so just pop response in this case class
@@ -15,7 +16,7 @@ object Repository {
   //http://farm6.static.flickr.com/5243/5229400272_3140317214.jpg
   val ImageRegex = """.*<img src="(http://[\w\d/\.-_]*)"\s*width=.*""".r
 
-  lazy val apiKey = {
+  lazy val key = {
     /*
     if you are reading this you probably need to...
     create the following file...
@@ -29,14 +30,17 @@ object Repository {
     Some(props.getProperty("apiKey"))
   }
 
+  private object CachingApi extends Api with UrlFetcherHttp {
+    apiKey = key
+  }
+
+
   object currentPage extends RequestVar[Int]({
     Integer.parseInt(S.param("page").getOrElse("1"))
   })
 
   object searchResult extends RequestVar[SearchResult]({
-
-        Api.apiKey = apiKey
-        val result = Api.search.page(currentPage.get).pageSize(12)
+        val result = CachingApi.search.page(currentPage.get).pageSize(12)
           .tag("profile/grrlscientist").q("\"today's mystery bird\"").showFields("body,trailText")
 
         SearchResult(result.pages, result.results)
@@ -48,4 +52,14 @@ object Repository {
         case _ => false
     })
   })
+}
+
+trait UrlFetcherHttp extends Http {
+  val fetcher = new UrlFetcher{}
+
+  def GET(url: String, headers: Iterable[ (String, String) ] = Nil): HttpResponse = {
+    fetcher.GET(url + "&format=json", params = None, cacheFor = ExpirationSeconds(10).minutes) match {
+      case Response(200, Some(xml), _) => HttpResponse(xml, 200, "")
+    }
+  }
 }
